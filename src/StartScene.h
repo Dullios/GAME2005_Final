@@ -41,7 +41,9 @@ private:
 	Mine* m_pMine;
 
 	// Bullet Stuff
-	Target* m_pBullet;
+	//Target* m_pBullet;
+
+	std::vector<Target*> m_pBullets;
 
 	glm::vec2 m_mousePosition;
 

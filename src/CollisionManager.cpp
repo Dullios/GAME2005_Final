@@ -185,13 +185,13 @@ bool CollisionManager::circleAABBCheck(GameObject * object1, GameObject * object
 			glm::vec2  normal = glm::vec2(0.0f, -1.0f);
 
 
-			std::cout << "=====================================" << std::endl;
+			/*std::cout << "=====================================" << std::endl;
 			std::cout << "AttackX: " << attackVector.x << std::endl;
-			std::cout << "AttackY: " << attackVector.y << std::endl;
+			std::cout << "AttackY: " << attackVector.y << std::endl;*/
 			float dot = Util::dot(attackVector, normal);
-			std::cout << "dot: " << dot << std::endl;
+			/*std::cout << "dot: " << dot << std::endl;*/
 			float angle = acos(dot / Util::magnitude(attackVector)) * Util::Rad2Deg;
-			std::cout << "Angle: " << angle << std::endl;
+			/*std::cout << "Angle: " << angle << std::endl;*/
 			
 			switch (object2->getType()) {
 			case PLANET:
@@ -203,7 +203,7 @@ bool CollisionManager::circleAABBCheck(GameObject * object1, GameObject * object
 				TheSoundManager::Instance()->playSound("thunder", 0);
 				break;
 			case SHIP:
-				std::cout << "Collision with Ship!" << std::endl;
+				//std::cout << "Collision with Ship!" << std::endl;
 				TheSoundManager::Instance()->playSound("thunder", 0);
 
 				if((attackVector.x > 0 && attackVector.y < 0) || (attackVector.x < 0 && attackVector.y < 0)) 

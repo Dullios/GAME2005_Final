@@ -23,7 +23,11 @@ void StartScene::draw()
 	m_pShip->draw();	
 	//m_pPlanet->draw();
 	//m_pMine->draw();
-	m_pBullet->draw();
+
+	for (auto bullet : m_pBullets)
+	{
+		bullet->draw();
+	}
 
 	// ImGui Rendering section - DO NOT MOVE OR DELETE
 	if (m_displayUI)
@@ -50,7 +54,11 @@ void StartScene::update()
 	m_pShip->update();
 	//m_pPlanet->update();
 	//m_pMine->update();
-	m_pBullet->update();
+	for (auto bullet : m_pBullets)
+	{
+		bullet->update();
+		CollisionManager::circleAABBCheck(bullet, m_pShip);
+	}
 
 	//CollisionManager::squaredRadiusCheck(m_pShip, m_pPlanet);
 	//CollisionManager::squaredRadiusCheck(m_pShip, m_pMine);
@@ -60,8 +68,6 @@ void StartScene::update()
 
 	//CollisionManager::circleAABBCheck(m_pShip, m_pPlanet);
 	//CollisionManager::circleAABBCheck(m_pShip, m_pMine);
-	
-	CollisionManager::circleAABBCheck(m_pBullet, m_pShip);
 	
 	
 	if (m_displayUI)
@@ -208,9 +214,13 @@ void StartScene::start()
 	m_pMine = new Mine();
 	m_pMine->setPosition(glm::vec2(200.0f, 200.0));
 
-	// Instantiate a Bullet
-	m_pBullet = new Target();
-	m_pBullet->reset();
+	// Instantiate a vector of Bullets
+	for (int i = 0; i < 50; ++i)
+	{
+		auto bullet = new Target();
+		bullet->reset();
+		m_pBullets.push_back(bullet);
+	}
 }
 
 void StartScene::m_ImGuiKeyMap()
