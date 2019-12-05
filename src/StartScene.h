@@ -10,6 +10,7 @@
 #include "Mine.h"
 #include "CollisionManager.h"
 #include "SoundManager.h"
+#include "Target.h"
 
 class StartScene : public Scene
 {
@@ -38,6 +39,9 @@ private:
 
 	// Mine Stuff
 	Mine* m_pMine;
+
+	// Bullet Stuff
+	Target* m_pBullet;
 
 	glm::vec2 m_mousePosition;
 

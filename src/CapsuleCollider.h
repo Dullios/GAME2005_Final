@@ -10,7 +10,7 @@
 class CapsuleCollider : public Collider
 {
 public:
-	CapsuleCollider(glm::vec2 start = glm::vec2(0.0f, 0.0f), glm::vec2 end = glm::vec2(0.0f, 0.0f), int radius = 0):m_start(start), m_end(end), m_radius(radius){setCollisionShape(CIRCLE); }
+	CapsuleCollider(glm::vec2 start = glm::vec2(0.0f, 0.0f), glm::vec2 end = glm::vec2(0.0f, 0.0f), int radius = 0):m_start(start), m_end(end), m_radius(radius){setCollisionShape(CAPSULE); }
 	~CapsuleCollider() {}
 
 	// getters and setters

@@ -21,8 +21,9 @@ void StartScene::draw()
 	m_pInstructionsLabel->draw();*/
 
 	m_pShip->draw();	
-	m_pPlanet->draw();
-	m_pMine->draw();
+	//m_pPlanet->draw();
+	//m_pMine->draw();
+	m_pBullet->draw();
 
 	// ImGui Rendering section - DO NOT MOVE OR DELETE
 	if (m_displayUI)
@@ -32,12 +33,12 @@ void StartScene::draw()
 		SDL_SetRenderDrawColor(TheGame::Instance()->getRenderer(), 255, 255, 255, 255);
 
 		// debug collider shapes
-		//Util::DrawRect(m_pShip->getPosition() - glm::vec2(m_pShip->getWidth() * 0.5f, m_pShip->getHeight() *0.5f), m_pShip->getWidth(), m_pShip->getHeight());
-		Util::DrawRect(m_pPlanet->getPosition() - glm::vec2(m_pPlanet->getWidth() * 0.5f, m_pPlanet->getHeight() *0.5f), m_pPlanet->getWidth(), m_pPlanet->getHeight());
-		Util::DrawRect(m_pMine->getPosition() - glm::vec2(m_pMine->getWidth() * 0.5f, m_pMine->getHeight() *0.5f), m_pMine->getWidth(), m_pMine->getHeight());
+		Util::DrawRect(m_pShip->getPosition() - glm::vec2(m_pShip->getWidth() * 0.5f, m_pShip->getHeight() *0.5f), m_pShip->getWidth(), m_pShip->getHeight());
+		//Util::DrawRect(m_pPlanet->getPosition() - glm::vec2(m_pPlanet->getWidth() * 0.5f, m_pPlanet->getHeight() *0.5f), m_pPlanet->getWidth(), m_pPlanet->getHeight());
+		//Util::DrawRect(m_pMine->getPosition() - glm::vec2(m_pMine->getWidth() * 0.5f, m_pMine->getHeight() *0.5f), m_pMine->getWidth(), m_pMine->getHeight());
 		
 
-		Util::DrawCircle(m_pShip->getPosition(), std::max(m_pShip->getWidth() * 0.5, m_pShip->getHeight() * 0.5));
+		//Util::DrawCircle(m_pShip->getPosition(), std::max(m_pShip->getWidth() * 0.5, m_pShip->getHeight() * 0.5));
 		//Util::DrawCircle(m_pPlanet->getPosition(), std::max(m_pPlanet->getWidth() * 0.5, m_pPlanet->getHeight() * 0.5));
 		//Util::DrawCircle(m_pMine->getPosition(), std::max(m_pMine->getWidth() * 0.5, m_pMine->getHeight() * 0.5));
 	}
@@ -47,8 +48,9 @@ void StartScene::update()
 {
 	m_move();
 	m_pShip->update();
-	m_pPlanet->update();
-	m_pMine->update();
+	//m_pPlanet->update();
+	//m_pMine->update();
+	m_pBullet->update();
 
 	//CollisionManager::squaredRadiusCheck(m_pShip, m_pPlanet);
 	//CollisionManager::squaredRadiusCheck(m_pShip, m_pMine);
@@ -56,8 +58,8 @@ void StartScene::update()
 	//CollisionManager::AABBCheck(m_pShip, m_pPlanet);
 	//CollisionManager::AABBCheck(m_pShip, m_pMine);
 
-	CollisionManager::circleAABBCheck(m_pShip, m_pPlanet);
-	CollisionManager::circleAABBCheck(m_pShip, m_pMine);
+	//CollisionManager::circleAABBCheck(m_pShip, m_pPlanet);
+	//CollisionManager::circleAABBCheck(m_pShip, m_pMine);
 	
 	
 	if (m_displayUI)
@@ -188,7 +190,7 @@ void StartScene::start()
 		"../Assets/audio/thunder.ogg", 
 		"thunder", SOUND_SFX);
 
-	m_position = glm::vec2(100.0f, 100.0f);
+	m_position = glm::vec2(400.0f, 300.0f);
 	m_pShip = new Ship();
 	m_pShip->setPosition(m_position);
 	addChild(m_pShip);
@@ -203,6 +205,10 @@ void StartScene::start()
 	// Instantiate a Space Mine
 	m_pMine = new Mine();
 	m_pMine->setPosition(glm::vec2(200.0f, 200.0));
+
+	// Instantiate a Bullet
+	m_pBullet = new Target();
+	m_pBullet->reset();
 }
 
 void StartScene::m_ImGuiKeyMap()
