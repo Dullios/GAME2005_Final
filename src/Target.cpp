@@ -40,7 +40,7 @@ void Target::clean()
 
 void Target::m_move()
 {
-	glm::vec2 newPosition = getPosition() + getVelocity() * 5.0f;
+	glm::vec2 newPosition = getPosition() + getVelocity() * 2.0f;
 	setPosition(newPosition);
 }
 

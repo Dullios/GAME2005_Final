@@ -61,6 +61,8 @@ void StartScene::update()
 	//CollisionManager::circleAABBCheck(m_pShip, m_pPlanet);
 	//CollisionManager::circleAABBCheck(m_pShip, m_pMine);
 	
+	CollisionManager::circleAABBCheck(m_pBullet, m_pShip);
+	
 	
 	if (m_displayUI)
 	{
@@ -196,7 +198,7 @@ void StartScene::start()
 	addChild(m_pShip);
 
 	m_moveState = MOVE_IDLE;
-	m_speedFactor = glm::vec2(2.0f, 2.0f);
+	m_speedFactor = glm::vec2(4.0f, 4.0f);
 
 	// Instantiate a Planet
 	m_pPlanet = new Planet();

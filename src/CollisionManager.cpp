@@ -169,7 +169,10 @@ bool CollisionManager::circleAABBCheck(GameObject * object1, GameObject * object
 	int circleRadius = std::max(object1->getWidth() * 0.5f, object1->getHeight() * 0.5f);
 	// aabb
 	int boxWidth = object2->getWidth();
+	int halfBoxWidth = boxWidth * 0.5f;
 	int boxHeight = object2->getHeight();
+	int halfBoxHeight = boxHeight * 0.5f;
+	
 	glm::vec2 boxStart = object2->getPosition() - glm::vec2(boxWidth * 0.5f, boxHeight * 0.5f);
 
 	if(circleAABBsquaredDistance(circleCentre, circleRadius, boxStart, boxWidth, boxHeight) <= (circleRadius * circleRadius))
@@ -178,6 +181,18 @@ bool CollisionManager::circleAABBCheck(GameObject * object1, GameObject * object
 
 			object2->setIsColliding(true);
 
+			glm::vec2 attackVector = object1->getPosition() - object2->getPosition();
+			glm::vec2  normal = glm::vec2(0.0f, -1.0f);
+
+
+			std::cout << "=====================================" << std::endl;
+			std::cout << "AttackX: " << attackVector.x << std::endl;
+			std::cout << "AttackY: " << attackVector.y << std::endl;
+			float dot = Util::dot(attackVector, normal);
+			std::cout << "dot: " << dot << std::endl;
+			float angle = acos(dot / Util::magnitude(attackVector)) * Util::Rad2Deg;
+			std::cout << "Angle: " << angle << std::endl;
+			
 			switch (object2->getType()) {
 			case PLANET:
 				std::cout << "Collision with Planet!" << std::endl;
@@ -186,6 +201,38 @@ bool CollisionManager::circleAABBCheck(GameObject * object1, GameObject * object
 			case MINE:
 				std::cout << "Collision with Mine!" << std::endl;
 				TheSoundManager::Instance()->playSound("thunder", 0);
+				break;
+			case SHIP:
+				std::cout << "Collision with Ship!" << std::endl;
+				TheSoundManager::Instance()->playSound("thunder", 0);
+
+				if((attackVector.x > 0 && attackVector.y < 0) || (attackVector.x < 0 && attackVector.y < 0)) 
+					// top right or top left
+				{
+					if(angle <= 45)
+					{
+						object1->setVelocity(glm::vec2(object1->getVelocity().x, -object1->getVelocity().y));
+					}
+					else
+					{
+						object1->setVelocity(glm::vec2(-object1->getVelocity().x, object1->getVelocity().y));
+						
+					}
+				}
+
+				if((attackVector.x > 0 && attackVector.y > 0)  || (attackVector.x < 0 && attackVector.y > 0))
+					// bottom right or bottom left
+				{
+					if(angle <= 135)
+					{
+						object1->setVelocity(glm::vec2(-object1->getVelocity().x, object1->getVelocity().y));
+					}
+					else
+					{
+						object1->setVelocity(glm::vec2(object1->getVelocity().x, -object1->getVelocity().y));
+					}
+				}
+				
 				break;
 			default:
 				//std::cout << "Collision with unknown type!" << std::endl;
