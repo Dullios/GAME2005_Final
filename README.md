@@ -1,1 +1,1 @@
-# GAME2005 - Game Physics - Lesson 13 - More Collision Detection
+# GAME2005 - Game Physics - Lesson 14 - Collision Response
