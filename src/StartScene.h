@@ -3,14 +3,12 @@
 #define __START_SCENE__
 
 #include "Scene.h"
-#include "Label.h"
-#include "ship.h"
 #include "MoveState.h"
-#include "Planet.h"
-#include "Mine.h"
 #include "CollisionManager.h"
 #include "SoundManager.h"
-#include "Target.h"
+
+#include "Platform.h"
+#include "Hero.h"
 
 class StartScene : public Scene
 {
@@ -26,24 +24,12 @@ public:
 	virtual void start() override;
 
 private:
-	/*Label* m_pStartLabel;
-	Label* m_pInstructionsLabel;*/
+	// Hero Stuff
+	Hero* m_pHero;
+	bool m_landed = false;
 
-	// Ship Stuff
-	Ship* m_pShip;
-	MoveState m_moveState;
-	glm::vec2 m_speedFactor;
-
-	// Planet Stuff
-	Planet* m_pPlanet;
-
-	// Mine Stuff
-	Mine* m_pMine;
-
-	// Bullet Stuff
-	//Target* m_pBullet;
-
-	std::vector<Target*> m_pBullets;
+	// Platform Stuff
+	Platform* m_pPlatform;
 
 	glm::vec2 m_mousePosition;
 
@@ -59,10 +45,12 @@ private:
 
 	// Physics Variables
 	float m_gravity = 9.8f;
+	bool m_enableGravity = false;
 	int m_PPM = 10; // pixels per meter
 	glm::vec2 m_position = glm::vec2(0.0f, 0.0f);
 	glm::vec2 m_velocity = glm::vec2(0.0f, 0.0f);
 	glm::vec2 m_acceleration = glm::vec2(0.0f, 0.0f);
+	glm::vec2 m_speedFactor = glm::vec2(0.0f, 0.0f);
 
 	// Physics functions
 	void m_move();

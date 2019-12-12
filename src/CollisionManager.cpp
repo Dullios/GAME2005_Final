@@ -56,16 +56,16 @@ bool CollisionManager::AABBCheck(GameObject * object1, GameObject * object2)
 	// prepare relevant variables
 	glm::vec2 P1 = object1->getPosition();
 	glm::vec2 P2 = object2->getPosition();
-	float P1width = object1->getWidth();
-	float P1height = object1->getHeight();
-	float P2width = object2->getWidth();
-	float P2height = object2->getHeight();
+	float P1width = object1->getWidth() * 0.5f;
+	float P1height = object1->getHeight() * 0.5f;
+	float P2width = object2->getWidth() * 0.5f;
+	float P2height = object2->getHeight() * 0.5f;
 
 	if(
-		P1.x < P2.x + P2width &&
-		P1.x + P1width > P2.x &&
-		P1.y < P2.y + P2height &&
-		P1.y + P1height > P2.y
+		P1.x - P1width	< P2.x + P2width &&
+		P1.x + P1width	> P2.x - P2width &&
+		P1.y - P1height	< P2.y + P2height &&
+		P1.y + P1height	> P2.y - P2height
 		)
 	{
 		if (!object2->getIsColliding()) {
@@ -73,13 +73,12 @@ bool CollisionManager::AABBCheck(GameObject * object1, GameObject * object2)
 			object2->setIsColliding(true);
 
 			switch (object2->getType()) {
-			case PLANET:
-				std::cout << "Collision with Planet!" << std::endl;
+			case PLATFORM:
+				std::cout << "Collision with Platform!" << std::endl;
 				TheSoundManager::Instance()->playSound("yay", 0);
-				break;
-			case MINE:
-				std::cout << "Collision with Mine!" << std::endl;
-				TheSoundManager::Instance()->playSound("thunder", 0);
+
+				object1->setPosition(glm::vec2(P1.x, P2.y - P2height - P1height));
+
 				break;
 			default:
 				//std::cout << "Collision with unknown type!" << std::endl;
@@ -152,6 +151,36 @@ bool CollisionManager::lineRectCheck(glm::vec2 line1Start, glm::vec2 line1End, g
 	return false;
 }
 
+int CollisionManager::minSquaredDistanceLineLine(glm::vec2 line1Start, glm::vec2 line1End, glm::vec2 line2Start, glm::vec2 line2End)
+{
+	glm::vec2 u = line1End - line1Start;
+	glm::vec2 v = line2End - line2Start;
+	glm::vec2 w = line1Start - line2Start;
+	float a = Util::dot(u, u);         // always >= 0
+	float b = Util::dot(u, v);
+	float c = Util::dot(v, v);         // always >= 0
+	float d = Util::dot(u, w);
+	float e = Util::dot(v, w);
+	float D = a * c - b * b;					// always >= 0
+	float sc, tc;
+
+	// compute the line parameters of the two closest points
+	if (D < Util::EPSILON) {					// the lines are almost parallel
+		sc = 0.0;
+		tc = (b > c ? d / b : e / c);			// use the largest denominator
+	}
+	else {
+		sc = (b*e - c * d) / D;
+		tc = (a*e - b * d) / D;
+	}
+
+	// get the difference of the two closest points
+	glm::vec2 dP = w + (sc * u) - (tc * v);  // =  L1(sc) - L2(tc)
+
+	float norm = Util::dot(dP, dP);
+	return norm;
+}
+
 int CollisionManager::circleAABBsquaredDistance(glm::vec2 circleCentre, int circleRadius, glm::vec2 boxStart, int boxWidth, int boxHeight)
 {
 	float dx = std::max(boxStart.x - circleCentre.x, 0.0f);
@@ -191,7 +220,7 @@ bool CollisionManager::circleAABBCheck(GameObject * object1, GameObject * object
 			float dot = Util::dot(attackVector, normal);
 			/*std::cout << "dot: " << dot << std::endl;*/
 			float angle = acos(dot / Util::magnitude(attackVector)) * Util::Rad2Deg;
-			/*std::cout << "Angle: " << angle << std::endl;*/
+			//std::cout << "Angle: " << angle << std::endl;
 			
 			switch (object2->getType()) {
 			case PLANET:
@@ -216,7 +245,6 @@ bool CollisionManager::circleAABBCheck(GameObject * object1, GameObject * object
 					else
 					{
 						object1->setVelocity(glm::vec2(-object1->getVelocity().x, object1->getVelocity().y));
-						
 					}
 				}
 
@@ -242,6 +270,53 @@ bool CollisionManager::circleAABBCheck(GameObject * object1, GameObject * object
 			return true;
 		}
 		return false;
+	}
+	else
+	{
+		object2->setIsColliding(false);
+		return false;
+	}
+	
+	return false;
+}
+
+bool CollisionManager::capsuleCapsuleCheck(GameObject * object1, GameObject * object2)
+{
+	glm::vec2 P1 = object1->getPosition();
+	glm::vec2 P2 = object2->getPosition();
+	int P1Width = object1->getWidth();
+	int P1Height = object1->getHeight();
+	int P2Width = object2->getWidth();
+	int P2Height = object2->getHeight();
+	
+	float radius1 = glm::max(P1Width, P1Height);
+	float radius2 = glm::max(P2Width, P2Height);
+
+	float distSq = minSquaredDistanceLineLine(
+		glm::vec2(P1.x, P1.y - P1Height * 0.5),
+		glm::vec2(P1.x, P1.y + P1Height * 0.5),
+		glm::vec2(P2.x - P2Width * 0.5f, P2.y), 
+		glm::vec2(P2.x + P2Width * 0.5f, P2.y));
+	
+	float sumRadii = radius1 + radius2;
+	
+	if(distSq <= (sumRadii * sumRadii))
+	{
+		if (!object2->getIsColliding()) {
+
+			object2->setIsColliding(true);
+
+			switch (object2->getType()) {
+				case PLATFORM:
+					std::cout << "Collision with Platform!" << std::endl;
+					TheSoundManager::Instance()->playSound("yay", 0);
+					break;
+				default:
+					//std::cout << "Collision with unknown type!" << std::endl;
+					break;
+			}
+			return true;
+		}
 	}
 	else
 	{

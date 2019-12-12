@@ -207,6 +207,29 @@ void TextureManager::drawFrame(std::string id, int x, int y, int currentRow, int
 	SDL_RenderCopyEx(pRenderer, m_textureMap[id], &srcRect, &destRect, angle, 0, flip);
 }
 
+void TextureManager::drawFrame(std::string id, int x, int y, int width, int height, int currentRow, int currentFrame, SDL_Renderer* pRenderer, bool centered, SDL_RendererFlip flip)
+{
+	SDL_Rect srcRect;
+	SDL_Rect destRect;
+
+	srcRect.x = width * currentFrame;
+	srcRect.y = height * (currentRow - 1);
+	srcRect.w = destRect.w = width;
+	srcRect.h = destRect.h = height;
+	destRect.x = x;
+	destRect.y = y;
+
+	if (centered)
+	{
+		int xOffset = width * 0.5f;
+		int yOffset = height * 0.5f;
+		destRect.x -= xOffset;
+		destRect.y -= yOffset;
+	}
+
+	SDL_RenderCopyEx(pRenderer, m_textureMap[id], &srcRect, &destRect, 0, 0, flip);
+}
+
 void TextureManager::drawText(std::string id, int x, int y, SDL_Renderer * pRenderer, double angle, int alpha, bool centered, SDL_RendererFlip flip)
 {
 	SDL_Rect srcRect;

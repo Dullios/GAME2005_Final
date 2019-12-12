@@ -23,7 +23,7 @@
     <ProjectGuid>{EE7E35FB-54EC-438D-9F7E-0B418207EC9A}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
     <RootNamespace>Template</RootNamespace>
-    <WindowsTargetPlatformVersion>10.0.16299.0</WindowsTargetPlatformVersion>
+    <WindowsTargetPlatformVersion>10.0.17763.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -167,10 +167,12 @@
     <ClCompile Include="..\src\FontManager.cpp" />
     <ClCompile Include="..\src\Game.cpp" />
     <ClCompile Include="..\src\GameObject.cpp" />
+    <ClCompile Include="..\src\Hero.cpp" />
     <ClCompile Include="..\src\Label.cpp" />
     <ClCompile Include="..\src\main.cpp" />
     <ClCompile Include="..\src\Mine.cpp" />
     <ClCompile Include="..\src\Planet.cpp" />
+    <ClCompile Include="..\src\Platform.cpp" />
     <ClCompile Include="..\src\PlayScene.cpp" />
     <ClCompile Include="..\src\Scene.cpp" />
     <ClCompile Include="..\src\ship.cpp" />
@@ -200,11 +202,13 @@
     <ClInclude Include="..\src\FontManager.h" />
     <ClInclude Include="..\src\Game.h" />
     <ClInclude Include="..\src\GameObject.h" />
+    <ClInclude Include="..\src\Hero.h" />
     <ClInclude Include="..\src\Label.h" />
     <ClInclude Include="..\src\LineCollider.h" />
     <ClInclude Include="..\src\Mine.h" />
     <ClInclude Include="..\src\MoveState.h" />
     <ClInclude Include="..\src\Planet.h" />
+    <ClInclude Include="..\src\Platform.h" />
     <ClInclude Include="..\src\PlayScene.h" />
     <ClInclude Include="..\src\Scene.h" />
     <ClInclude Include="..\src\ship.h" />
